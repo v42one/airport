@@ -1,0 +1,54 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    clash-proxy-type: ss
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        clash-proxy-cipher: xchacha20-ietf-poly1305
+        clash-proxy-password: {{ randAlphaNum 16 }}
+        clash-proxy-ports: {{ .Values.expose.ports | join "," }}
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - {{ .Release.Name }}
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: shadowshocks
+          image: "{{ .Values.shadowsocks.registry }}:{{ .Values.shadowsocks.tag }}"
+          imagePullPolicy: {{ .Values.shadowsocks.pullPolicy }}
+          ports:
+            - name: tcp
+              containerPort: 8388
+              protocol: TCP
+            - name: udp
+              containerPort: 8388
+              protocol: UDP
+          env:
+            - name: PASSWORD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['clash-proxy-password']
+            - name: METHOD
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['clash-proxy-cipher']

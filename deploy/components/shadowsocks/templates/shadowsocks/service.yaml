@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: NodePort
+  ports: {{ range $i, $port := .Values.expose.ports }}
+    - name: tcp-{{ $i }}
+      protocol: TCP
+      nodePort: {{ $port }}
+      port: {{ $port }}
+      targetPort: 8388
+  {{ end }}
+  selector:
+    app: {{ .Release.Name }}
