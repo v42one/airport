@@ -1,0 +1,9 @@
+spec:
+  network:
+    provider: calico
+    calico:
+      mode: "bird"
+    dualStack:
+      enabled: true
+      IPv6podCIDR: "fd00::/108"
+      IPv6serviceCIDR: "fd01::/108"
