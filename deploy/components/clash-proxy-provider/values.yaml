@@ -1,0 +1,12 @@
+operator:
+  registry: docker.io/morlay/clash-proxy-operator
+  tag: master
+  pullPolicy: Always
+
+server:
+  registry: docker.io/library/nginx
+  tag: 1.19.6-alpine
+  pullPolicy: IfNotPresent
+
+expose:
+  publicIPs: []
