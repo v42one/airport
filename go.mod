@@ -5,7 +5,7 @@ go 1.15
 require (
 	cloud.google.com/go v0.75.0 // indirect
 	github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6 // indirect
-	github.com/go-logr/logr v0.3.0
+	github.com/go-logr/logr v0.4.0
 	github.com/go-logr/zapr v0.3.0 // indirect
 	github.com/go-openapi/validate v0.19.5 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
