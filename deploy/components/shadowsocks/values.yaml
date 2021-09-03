@@ -1,9 +1,0 @@
-shadowsocks:
-  registry: docker.io/shadowsocks/shadowsocks-libev
-  tag: latest
-  pullPolicy: Always
-
-expose:
-  ports:
-    - 30001
-    - 30002
