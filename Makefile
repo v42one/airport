@@ -8,18 +8,25 @@ GOBIN ?= ./bin
 GOOS ?= $(shell go env GOOS)
 GOARCH ?= $(shell go env GOARCH)
 
-APP ?= clash-proxy-operator
+APP ?= clash-proxy-provider
 WORKSPACE ?= ./cmd/$(APP)
 
 HUB ?= docker.io/morlay
 TAG ?= master
 NAMESPACE ?= clash-proxy
+KUBECONFIG = ${HOME}/.kube/config--hw-sg.yaml
 
-up:
-	WATCH_NAMESPACE=$(NAMESPACE) go run $(WORKSPACE)
+up: tidy fmt
+	WATCH_NAMESPACE=$(NAMESPACE) KUBECONFIG=$(KUBECONFIG) go run $(WORKSPACE)
 
-build:
+build: tidy
 	$(GOBUILD) -o $(GOBIN)/$(APP)-$(GOOS)-$(GOARCH) $(WORKSPACE)
+
+fmt:
+	goimports -w -l .
+
+tidy:
+	go mod tidy
 
 PLATFORMS = amd64 arm64
 
@@ -42,10 +49,10 @@ dockerx:
 dockerx.dev: buildx
 	$(MAKE) dockerx BUILDER=local
 
+apply.shadowsocks:
+	cd ./deploy && cuem k show -o _output/ ./shadowsocks
+	cd ./deploy && cuem k apply ./shadowsocks
 
-WORKING_DIR = ./deploy
-
-include $(WORKING_DIR)/components/Makefile
-
-apply.%:
-	$(MAKE) apply COMPONENT=$*
+apply.clash-proxy-provider:
+	cd ./deploy && cuem k show -o _output/ ./clash-proxy-provider
+	cd ./deploy && cuem k apply ./clash-proxy-provider
