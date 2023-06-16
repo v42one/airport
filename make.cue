@@ -1,12 +1,11 @@
 package main
 
 import (
-	"encoding/yaml"
-
 	"wagon.octohelm.tech/core"
 
 	"github.com/v42one/clash-proxy/cuepkg/proxyprovider"
 	"github.com/v42one/clash-proxy/cuepkg/clash"
+	"github.com/octohelm/kubepkg/cuepkg/kubepkgcli"
 )
 
 // must be uuid
@@ -22,26 +21,28 @@ actions: config: clash.#Config & {
 for region, ips in clusters {
 	actions: cluster: {
 		"\(region)": {
-			_app: (proxyprovider.#ProxyProvider & {
-				#values: {
-					"config":   actions.config
-					"clusters": clusters
-					"secret":   secret
+			_manifests: kubepkgcli.#Manifests & {
+				image: tag: "v0.5.1-20230616092629-29f3314eb178"
+				kubepkg: proxyprovider.#ProxyProvider & {
+					#values: {
+						"config":   actions.config
+						"clusters": clusters
+						"secret":   secret
+					}
 				}
-			})
-
-			_manifests: yaml.MarshalStream([
-					for k, ms in _app.kube if k != "namespace" for n, m in ms {
-					m
-				},
-			])
-
-			_write: core.#WriteFile & {
-				contents: _manifests
-				path:     "\(region)/proxyprovider.yaml"
+				flags: {
+					"--output": "/\(region)/proxyprovider.yaml"
+				}
 			}
 
-			output: _write.output
+			_copy: core.#Copy & {
+				contents: _manifests.output.rootfs
+				include: [
+					"\(region)",
+				]
+			}
+
+			output: _copy.output
 		}
 	}
 }
