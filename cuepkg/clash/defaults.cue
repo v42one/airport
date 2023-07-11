@@ -22,7 +22,7 @@ package clash
 
 	for g, values in _rules
 	for n, v in values {
-		"\(g)": "\(n)": "https://gh-proxy.com/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/\(n).txt"
+		"\(g)": "\(n)": "https://ghproxy.com/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/\(n).txt"
 	}
 }
 
