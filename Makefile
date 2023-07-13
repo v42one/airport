@@ -1,23 +1,13 @@
 export BUILDKIT_HOST =
 
-dump:
-	wagon -p . do cluster all --output ./build
-
-MANIFESTS_ROOT=/var/lib/k0s/manifests/proxyprovider
+gen:
+	wagon -p . do all --output ./build
 
 apply.%:
-	ssh root@proxy-$* "mkdir -p $(MANIFESTS_ROOT)"
-	scp -r build/$*/proxyprovider.yaml root@proxy-$*:$(MANIFESTS_ROOT)/proxyprovider.yaml
-	ssh root@proxy-$* "sudo k0s kubectl apply -f $(MANIFESTS_ROOT)/proxyprovider.yaml"
+	cd ./build/$* && k0sctl apply --config cluster.yaml
 
-install:
-	curl -sSLf https://get.k0s.sh | sudo sh
-	sudo k0s config create > /etc/k0s/k0s.yaml
-	sudo k0s install controller --single
-	sudo k0s start
+kubeconfig.%:
+	cd ./build/$* && k0sctl kubeconfig --config cluster.yaml > ~/.kube_config/config--proxy-$*.yaml
 
-ping:
-	ping fra-de-ping.vultr.com -c 100
-#	ping hnd-jp-ping.vultr.com -c 5
-#	ping syd-au-ping.vultr.com -c 5
-#	ping par-fr-ping.vultr.com -c 5
+reset.%:
+	cd ./build/$* && k0sctl reset --config cluster.yaml
