@@ -1,4 +1,4 @@
-module: "github.com/v42one/clash-proxy"
+module: "github.com/v42one/airport"
 
 require: {
 	"github.com/innoai-tech/runtime": "v0.0.0-20221114082425-7a5e0cdc3035"

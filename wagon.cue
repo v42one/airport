@@ -4,36 +4,30 @@ import (
 	"encoding/yaml"
 	"wagon.octohelm.tech/core"
 
-	"github.com/v42one/clash-proxy/cuepkg/proxyprovider"
-	"github.com/v42one/clash-proxy/cuepkg/clash"
-	"github.com/v42one/clash-proxy/cuepkg/k0sctl"
+	"github.com/v42one/airport/cuepkg/singbox"
+	"github.com/v42one/airport/cuepkg/k0sctl"
 	"github.com/octohelm/kubepkg/cuepkg/kubepkgcli"
 )
 
 // must be uuid
 secret: string
-
 clusters: [Name=string]: [...string] // ips
-
-config: clash.#Config & {
-	rules:         clash.#DefaultRules
-	ruleProviders: clash.#DefaultRuleProviders
-}
+wireguard?: {...}
 
 for region, ips in clusters {
-	actions: "proxyprovider": "\(region)": {
+	actions: "singbox": "\(region)": {
 		_manifests: kubepkgcli.#Manifests & {
 			image: tag: "v0.5.3-0.20230710081347-f7c2f4a798c6"
-			kubepkg: proxyprovider.#ProxyProvider & {
+			kubepkg: singbox.#Server & {
 				#values: {
-					"config":   config
-					"clusters": clusters
-					"secret":   secret
+					"clusters":  clusters
+					"secret":    secret
+					"wireguard": wireguard
 				}
 			}
 			flags: {
 				"--namespace": "default"
-				"--output":    "/\(region)/manifests/proxyprovider/proxyprovider.yaml"
+				"--output":    "/\(region)/manifests/sing-box/sing-box.yaml"
 			}
 		}
 
@@ -66,7 +60,7 @@ for region, ips in clusters {
 				}
 			}
 			spec: k0s: {
-				version: "1.28.2+k0s.0"
+				version: "1.28.4+k0s.0"
 			}
 		}
 
@@ -80,7 +74,7 @@ for region, ips in clusters {
 actions: all: core.#Merge & {
 	inputs: [
 		for region, ips in clusters {
-			actions.proxyprovider["\(region)"].output
+			actions.singbox["\(region)"].output
 		},
 		for region, ips in clusters {
 			actions.cluster["\(region)"].output
