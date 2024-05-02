@@ -60,7 +60,7 @@ for region, ips in clusters {
 				}
 			}
 			spec: k0s: {
-				version: "1.28.4+k0s.0"
+				version: "1.28.9+k0s.0"
 			}
 		}
 
