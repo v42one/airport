@@ -1,7 +1,5 @@
-export BUILDKIT_HOST =
-
-gen:
-	wagon -p . do all --output ./build
+gen.%:
+	piper -p . do $*
 
 apply.%:
 	cd ./build/$* && k0sctl apply --disable-telemetry --config cluster.yaml

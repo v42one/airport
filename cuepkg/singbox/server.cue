@@ -3,7 +3,7 @@ package singbox
 import (
 	"encoding/json"
 
-	kubepkg "github.com/octohelm/kubepkg/cuepkg/kubepkg"
+	kubepkg "github.com/octohelm/kubepkgspec/cuepkg/kubepkg"
 )
 
 #Server: {
@@ -25,7 +25,7 @@ import (
 		}
 
 		spec: {
-			version: _ | *"1.8.12"
+			version: _ | *"1.9.0"
 
 			deploy: {
 				kind: "Deployment"
