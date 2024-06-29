@@ -22,6 +22,7 @@ package singbox
 				"huggingface.co",
 				"hf.co",
 				"pub.dev",
+				"pkg.dev",
 			]
 			outbound: "proxy"
 		},
@@ -165,6 +166,12 @@ package singbox
 				"feishupkg.com",
 			]
 			"server": "dns_direct"
+		},
+		{
+			"domain_suffix": [
+				"pkg.dev",
+			]
+			"server": "dns_proxy"
 		},
 		{
 			"rule_set": [
