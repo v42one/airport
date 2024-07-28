@@ -88,7 +88,7 @@ package singbox
 				"type":            "remote"
 				"format":          "binary"
 				"url":             "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/\(tag).srs"
-				"download_detour": "proxy"
+//				"download_detour": "proxy"
 			}
 		},
 	]
