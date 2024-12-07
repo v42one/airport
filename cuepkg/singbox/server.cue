@@ -25,7 +25,7 @@ import (
 		}
 
 		spec: {
-			version: _ | *"1.9.3"
+			version: _ | *"1.10.3"
 
 			deploy: {
 				kind: "Deployment"
