@@ -1,11 +1,16 @@
 package singbox
 
 #Config: {
-	log:      #Log
-	dns:      _ | *#DefaultDNS
-	route:    _ | *#DefaultRoute
+	log:   #Log
+	dns:   _ | *#DefaultDNS
+	route: _ | *#DefaultRoute
 	inbounds: [...] | *[#DefaultClientInbound]
 	outbounds: [...]
+	experimental: {
+		cache_file: {
+			enabled: true // required to save rule-set cache
+		}
+	}
 }
 
 #Log: {

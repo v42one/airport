@@ -1,9 +1,14 @@
 package singbox
 
+import (
+	"strings"
+)
+
 #DefaultClientInbound: {
-	type:          "tun"
-	inet4_address: "172.19.0.1/30"
-	//	inet6_address:              "fdfe:dcba:9876::1/126"
+	type: "tun"
+	address: [
+		"172.19.0.1/30",
+	]
 	auto_route:                 true
 	strict_route:               true
 	stack:                      "system"
@@ -31,15 +36,12 @@ package singbox
 			mode: "and"
 			rules: [
 				{
-					geosite: [
-						"geolocation-!cn",
-					]
+					rule_set: "geosite-cn"
+					invert:   true
 				},
 				{
-					geoip: [
-						"cn",
-					]
-					invert: true
+					rule_set: "geoip-cn"
+					invert:   true
 				},
 			]
 			outbound: "proxy"
@@ -49,57 +51,43 @@ package singbox
 			mode: "and"
 			rules: [
 				{
-					geosite: [
-						"cn",
-					]
+					rule_set: "geosite-cn"
 				},
 				{
-					geoip: [
-						"cn",
-					]
+					rule_set: "geoip-cn"
 				},
 			]
 			outbound: "direct"
 		},
 		{
-			geosite: [
-				"private",
-			]
-			outbound: "direct"
+			"ip_is_private": true
+			"outbound":      "direct"
 		},
 		{
-			geoip: [
-				"cn",
-				"private",
-			]
+			ip_cidr: []
 			outbound: "direct"
 		},
 	]
 
 	rule_set: [
 		for tag in [
-			"geosite-geolocation-!cn",
-			"geosite-geolocation-cn",
-			"geosite-private",
-			"geosite-openai",
+			"geosite-cn",
+			"geoip-cn",
 		] {
 			{
-				"tag":             tag
-				"type":            "remote"
-				"format":          "binary"
-				"url":             "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/\(tag).srs"
-//				"download_detour": "proxy"
+				"tag":    tag
+				"type":   "remote"
+				"format": "binary"
+				"url": [
+					if strings.HasPrefix(tag, "geosite-") {
+						"https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/\(tag).srs"
+					},
+					"https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/\(tag).srs",
+				][0]
+				"download_detour": "proxy"
 			}
 		},
 	]
-
-	geoip: {
-		"download_detour": "proxy"
-	}
-
-	geosite: {
-		"download_detour": "proxy"
-	}
 
 	final:                 "direct"
 	auto_detect_interface: true
@@ -174,17 +162,13 @@ package singbox
 			"server": "dns_proxy"
 		},
 		{
-			"rule_set": [
-				"geosite-geolocation-!cn",
-			]
-			"server": "dns_proxy"
+			"rule_set": "geosite-cn"
+			"invert":   true
+			"server":   "dns_proxy"
 		},
 		{
-			"rule_set": [
-				"geosite-geolocation-cn",
-				"geosite-private",
-			]
-			"server": "dns_direct"
+			"rule_set": "geosite-cn"
+			"server":   "dns_direct"
 		},
 		{
 			"outbound": [

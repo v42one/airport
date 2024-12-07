@@ -1,5 +1,5 @@
 gen.%:
-	piper -p . do $*
+	TTY=0  piper -p . do $*
 
 apply.%:
 	cd ./build/$* && k0sctl apply --disable-telemetry --config cluster.yaml
