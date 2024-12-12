@@ -84,7 +84,7 @@ import (
 					},
 					"https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/\(tag).srs",
 				][0]
-				"download_detour": "proxy"
+//				"download_detour": "proxy"
 			}
 		},
 	]
