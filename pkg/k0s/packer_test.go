@@ -8,6 +8,7 @@ import (
 
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
 	"github.com/octohelm/unifs/pkg/filesystem/local"
+
 	"github.com/v42one/airport/pkg/runtime"
 	"github.com/v42one/airport/pkg/singbox"
 	singboxcomponent "github.com/v42one/airport/pkg/singbox/component"
@@ -18,13 +19,13 @@ func TestPacker(t *testing.T) {
 
 	p := &Cluster{
 		Name:         "proxy-sg",
-		K0sVersion:   "1.32.4+k0s.0",
+		K0sVersion:   "1.34.1+k0s.1",
 		RemoteServer: cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 
 		Components: []*kubepkgv1alpha1.KubePkg{
 			runtime.Build(
 				runtime.With(&singboxcomponent.SingBox{
-					Version:    "1.11.10",
+					Version:    "1.12.12",
 					ServerName: "sg",
 					ServerIP:   cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 					VMess: &singbox.InboundVMess{

@@ -7,14 +7,16 @@ import (
 
 const APIVersion = k0sctlv1beta1.APIVersion
 
-type Spec = k0sctlclusterv1beta1.Spec
-type K0s = k0sctlclusterv1beta1.K0s
-type Host = k0sctlclusterv1beta1.Host
+type (
+	Spec = k0sctlclusterv1beta1.Spec
+	K0s  = k0sctlclusterv1beta1.K0s
+	Host = k0sctlclusterv1beta1.Host
+)
 
 type Cluster struct {
-	Kind       string          `json:"kind"`
+	Kind       string          `yaml:"kind"`
 	APIVersion string          `yaml:"apiVersion"`
-	Metadata   ClusterMetadata `json:"metadata"`
+	Metadata   ClusterMetadata `yaml:"metadata"`
 	Spec       *Spec           `yaml:"spec"`
 }
 

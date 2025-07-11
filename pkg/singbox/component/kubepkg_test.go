@@ -6,12 +6,13 @@ import (
 	"testing"
 
 	"github.com/sagernet/sing/common/json"
+
 	"github.com/v42one/airport/pkg/singbox"
 )
 
 func TestSingBox(t *testing.T) {
 	s := &SingBox{
-		Version:    "1.11.3",
+		Version:    "1.12.12",
 		ServerName: "sg",
 		ServerIP:   cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 		VMess: &singbox.InboundVMess{

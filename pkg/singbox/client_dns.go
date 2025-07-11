@@ -1,8 +1,11 @@
 package singbox
 
 import (
+	"cmp"
+
 	"github.com/sagernet/sing-box/option"
 	dns "github.com/sagernet/sing-dns"
+
 	"github.com/v42one/airport/pkg/runtime"
 )
 
@@ -14,44 +17,56 @@ type ClientDNS struct {
 }
 
 func (d *ClientDNS) ApplyTo(o *option.Options) {
-	runtime.Apply(o, WithDNSOptions(func(dnsOptions *option.DNSOptions) {
-		block := option.DNSServerOptions{}
-		block.Tag = "dns-block"
-		block.Options = runtime.Build(func(block *option.LegacyDNSServerOptions) {
-			block.Address = d.Block.String()
-		})
+	runtime.Apply(o,
+		WithDNSOptions(func(dnsOptions *option.DNSOptions) {
+			local := option.DNSServerOptions{}
+			local.Tag = "local"
+			local.Type = "local"
+			local.Options = make(map[string]interface{})
 
-		resolver := option.DNSServerOptions{}
-		resolver.Tag = "dns-resolver"
-		resolver.Options = runtime.Build(func(resolver *option.LegacyDNSServerOptions) {
-			resolver.Strategy = option.DomainStrategy(dns.DomainStrategyUseIPv4)
-			resolver.Address = d.Resolver.String()
-			resolver.Detour = "direct"
-		})
+			resolver := option.DNSServerOptions{}
+			resolver.Tag = "dns-resolver"
+			resolver.Type = cmp.Or(d.Resolver.Scheme, "udp")
+			resolver.Options = runtime.Build(func(o *option.RemoteDNSServerOptions) {
+				o.Server = d.Resolver.Host
+			})
 
-		direct := option.DNSServerOptions{}
-		direct.Tag = "dns-direct"
-		direct.Options = runtime.Build(func(direct *option.LegacyDNSServerOptions) {
-			direct.Strategy = option.DomainStrategy(dns.DomainStrategyUseIPv4)
-			direct.Address = d.Direct.String()
-			direct.Detour = "direct"
-			direct.AddressResolver = "dns-resolver"
-		})
+			direct := option.DNSServerOptions{}
+			direct.Tag = "dns-direct"
+			direct.Type = cmp.Or(d.Direct.Scheme, "udp")
+			direct.Options = runtime.Build(func(o *option.RemoteDNSServerOptions) {
+				o.Server = d.Direct.Host
 
-		proxy := option.DNSServerOptions{}
-		proxy.Tag = "dns-proxy"
-		proxy.Options = runtime.Build(func(proxy *option.LegacyDNSServerOptions) {
-			proxy.Strategy = option.DomainStrategy(dns.DomainStrategyUseIPv4)
-			proxy.Address = d.Proxy.String()
-			proxy.Detour = "proxy"
-			proxy.AddressResolver = "dns-resolver"
-		})
+				o.DomainResolver = runtime.Build(func(dr *option.DomainResolveOptions) {
+					dr.Server = resolver.Tag
+				})
+			})
 
-		dnsOptions.Servers = append(dnsOptions.Servers,
-			proxy,
-			direct,
-			resolver,
-			block,
-		)
-	}))
+			proxy := option.DNSServerOptions{}
+			proxy.Tag = "dns-proxy"
+			proxy.Type = cmp.Or(d.Proxy.Scheme, "udp")
+			proxy.Options = runtime.Build(func(o *option.RemoteDNSServerOptions) {
+				o.Server = d.Proxy.Host
+				o.Detour = "proxy"
+
+				o.DomainResolver = runtime.Build(func(dr *option.DomainResolveOptions) {
+					dr.Server = resolver.Tag
+				})
+			})
+
+			dnsOptions.Servers = append(dnsOptions.Servers,
+				proxy,
+				direct,
+				resolver,
+				local,
+			)
+
+			dnsOptions.Strategy = option.DomainStrategy(dns.DomainStrategyUseIPv4)
+		}),
+		WithRouteOptions(func(r *option.RouteOptions) {
+			r.DefaultDomainResolver = runtime.Build(func(dr *option.DomainResolveOptions) {
+				dr.Server = "local"
+			})
+		}),
+	)
 }

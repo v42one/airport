@@ -6,6 +6,7 @@ import (
 
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
 	"github.com/octohelm/x/ptr"
+
 	"github.com/v42one/airport/pkg/runtime"
 	"github.com/v42one/airport/pkg/singbox"
 )
@@ -21,6 +22,7 @@ type SingBox struct {
 func (s SingBox) ApplyTo(k *kubepkgv1alpha1.KubePkg) {
 	k.SetGroupVersionKind(kubepkgv1alpha1.SchemeGroupVersion.WithKind("KubePkg"))
 	k.Name = "sing-box"
+	k.Namespace = "default"
 
 	runtime.Apply(&k.Spec, func(spec *kubepkgv1alpha1.Spec) {
 		spec.Version = s.Version

@@ -2,6 +2,7 @@ package singbox
 
 import (
 	"github.com/sagernet/sing-box/option"
+
 	"github.com/v42one/airport/pkg/runtime"
 )
 

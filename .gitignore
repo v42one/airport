@@ -3,3 +3,4 @@ clusters.cue
 compose.yml
 .idea/
 target/
+.DS_Store

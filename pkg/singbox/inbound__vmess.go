@@ -1,10 +1,11 @@
 package singbox
 
 import (
+	"net/netip"
+
 	"github.com/octohelm/x/ptr"
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common/json/badoption"
-	"net/netip"
 )
 
 type InboundVMess struct {

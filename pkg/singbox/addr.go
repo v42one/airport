@@ -1,6 +1,8 @@
 package singbox
 
-import "strings"
+import (
+	"strings"
+)
 
 type Addr struct {
 	Scheme string

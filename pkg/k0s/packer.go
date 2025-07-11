@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sigs.k8s.io/yaml"
 
 	k0sctlclusterv1beta1 "github.com/k0sproject/k0sctl/pkg/apis/k0sctl.k0sproject.io/v1beta1/cluster"
 	"github.com/k0sproject/rig"
@@ -15,9 +14,11 @@ import (
 	"github.com/octohelm/kubepkgspec/pkg/manifest"
 	"github.com/octohelm/unifs/pkg/filesystem"
 	"github.com/octohelm/x/ptr"
+	"go.yaml.in/yaml/v3"
+	"sigs.k8s.io/yaml/kyaml"
+
 	"github.com/v42one/airport/pkg/k0s/v1beta1"
 	"github.com/v42one/airport/pkg/runtime"
-	yamlv2 "gopkg.in/yaml.v2"
 )
 
 const (
@@ -32,11 +33,23 @@ type Cluster struct {
 	Components   []*kubepkgv1alpha1.KubePkg
 }
 
-func (clt *Cluster) ExportTo(ctx context.Context, fsys filesystem.FileSystem) error {
-	clusterYamlRaw, err := yamlv2.Marshal(clt.toCluster())
+func toKYAML(raw []byte, err error) ([]byte, error) {
 	if err != nil {
-		return err
+		return nil, err
 	}
+	b := bytes.NewBuffer(nil)
+	if err := (&kyaml.Encoder{}).FromYAML(bytes.NewBuffer(raw), b); err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
+}
+
+func (clt *Cluster) ExportTo(ctx context.Context, fsys filesystem.FileSystem) error {
+	clusterYamlRaw, err := toKYAML(yaml.Marshal(clt.toCluster()))
+	if err != nil {
+		return fmt.Errorf("marshal cluster.kyaml failed: %w", err)
+	}
+
 	if err := saveTo(ctx, fsys, filepath.Join(clt.Name, "cluster.yaml"), clusterYamlRaw); err != nil {
 		return err
 	}
@@ -48,14 +61,12 @@ func (clt *Cluster) ExportTo(ctx context.Context, fsys filesystem.FileSystem) er
 		}
 
 		b := bytes.NewBuffer(nil)
+		enc := &kyaml.Encoder{}
 
 		for _, m := range manifests {
-			raw, err := yaml.Marshal(m)
-			if err != nil {
-				return err
+			if err := enc.FromObject(m, b); err != nil {
+				return fmt.Errorf("marshal to kyaml failed: %w", err)
 			}
-			b.WriteString("---\n")
-			b.Write(raw)
 		}
 
 		if err := saveTo(ctx,

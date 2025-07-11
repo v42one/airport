@@ -2,11 +2,11 @@ package singbox
 
 import (
 	"github.com/sagernet/sing-box/option"
+
 	"github.com/v42one/airport/pkg/runtime"
 )
 
-type HijackDNSRouteRule struct {
-}
+type HijackDNSRouteRule struct{}
 
 func (HijackDNSRouteRule) ApplyTo(o *option.Options) {
 	runtime.Apply(o, WithRouteOptions(func(route *option.RouteOptions) {

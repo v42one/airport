@@ -2,11 +2,11 @@ package singbox
 
 import (
 	"github.com/sagernet/sing-box/option"
+
 	"github.com/v42one/airport/pkg/runtime"
 )
 
-type SniffRouteRule struct {
-}
+type SniffRouteRule struct{}
 
 func (SniffRouteRule) ApplyTo(o *option.Options) {
 	runtime.Apply(o, WithRouteOptions(func(route *option.RouteOptions) {

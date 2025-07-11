@@ -2,7 +2,7 @@ package singbox
 
 import (
 	"bytes"
-	
+
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common/json"
 )

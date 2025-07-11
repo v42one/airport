@@ -8,6 +8,7 @@ import (
 	"github.com/octohelm/exp/xiter"
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common/json/badoption"
+
 	"github.com/v42one/airport/pkg/runtime"
 )
 
@@ -100,5 +101,4 @@ func (x OutboundVmess) ApplyTo(opt *option.Options) {
 			})
 		}
 	}
-
 }
