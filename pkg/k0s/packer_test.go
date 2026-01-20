@@ -19,13 +19,13 @@ func TestPacker(t *testing.T) {
 
 	p := &Cluster{
 		Name:         "proxy-sg",
-		K0sVersion:   "1.34.1+k0s.1",
+		K0sVersion:   "1.34.3+k0s.0",
 		RemoteServer: cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 
 		Components: []*kubepkgv1alpha1.KubePkg{
 			runtime.Build(
 				runtime.With(&singboxcomponent.SingBox{
-					Version:    "1.12.12",
+					Version:    "1.12.17",
 					ServerName: "sg",
 					ServerIP:   cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 					VMess: &singbox.InboundVMess{
