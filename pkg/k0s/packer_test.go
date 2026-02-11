@@ -4,6 +4,8 @@ import (
 	"cmp"
 	"context"
 	"os"
+	goruntimedebug "runtime/debug"
+	"sync"
 	"testing"
 
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
@@ -13,6 +15,18 @@ import (
 	"github.com/v42one/airport/pkg/singbox"
 	singboxcomponent "github.com/v42one/airport/pkg/singbox/component"
 )
+
+var getSingBoxVersion = sync.OnceValue(func() string {
+	if bi, ok := goruntimedebug.ReadBuildInfo(); ok {
+		for _, dep := range bi.Deps {
+			if dep.Path == "github.com/sagernet/sing-box" {
+				return dep.Version
+			}
+		}
+	}
+
+	return "v1.12.21"
+})
 
 func TestPacker(t *testing.T) {
 	root := local.NewFS("../../build")
@@ -25,7 +39,7 @@ func TestPacker(t *testing.T) {
 		Components: []*kubepkgv1alpha1.KubePkg{
 			runtime.Build(
 				runtime.With(&singboxcomponent.SingBox{
-					Version:    "1.12.17",
+					Version:    getSingBoxVersion(),
 					ServerName: "sg",
 					ServerIP:   cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 					VMess: &singbox.InboundVMess{

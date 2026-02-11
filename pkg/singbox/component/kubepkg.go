@@ -1,7 +1,6 @@
 package kubepkg
 
 import (
-	"fmt"
 	"path/filepath"
 
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
@@ -54,7 +53,7 @@ func (s SingBox) ApplyTo(k *kubepkgv1alpha1.KubePkg) {
 		spec.Containers = map[string]kubepkgv1alpha1.Container{
 			"sing-box": *runtime.Build(func(c *kubepkgv1alpha1.Container) {
 				c.Image.Name = "ghcr.io/sagernet/sing-box"
-				c.Image.Tag = fmt.Sprintf("v%s", s.Version)
+				c.Image.Tag = s.Version
 				c.Args = []string{
 					"run", "-c", serverConfigMountPath,
 				}
