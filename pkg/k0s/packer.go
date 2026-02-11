@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 
 	k0sctlclusterv1beta1 "github.com/k0sproject/k0sctl/pkg/apis/k0sctl.k0sproject.io/v1beta1/cluster"
-	"github.com/k0sproject/rig"
+	rig "github.com/k0sproject/rig/v2"
+	"github.com/k0sproject/rig/v2/protocol/ssh"
 	k0sprojectversion "github.com/k0sproject/version"
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
 	"github.com/octohelm/kubepkgspec/pkg/manifest"
 	"github.com/octohelm/unifs/pkg/filesystem"
-	"github.com/octohelm/x/ptr"
 	"go.yaml.in/yaml/v3"
 	"sigs.k8s.io/yaml/kyaml"
 
@@ -104,12 +104,14 @@ func (clt *Cluster) toClusterSpec() *v1beta1.Spec {
 				"--disable-components", "helm",
 			}
 
-			host.SSH = runtime.Build(func(ssh *rig.SSH) {
-				ssh.Address = clt.RemoteServer
-				ssh.Port = 22
-				ssh.KeyPath = ptr.Ptr("~/.ssh/id_rsa")
-				ssh.User = "root"
-			})
+			host.CompositeConfig = rig.CompositeConfig{
+				SSH: runtime.Build(func(c *ssh.Config) {
+					c.Address = clt.RemoteServer
+					c.Port = 22
+					c.KeyPath = new("~/.ssh/id_rsa")
+					c.User = "root"
+				}),
+			}
 
 			for _, x := range clt.Components {
 				distYAML := filepath.Join(manifestsHostBase, x.Name, fmt.Sprintf("%s.yaml", x.Name))

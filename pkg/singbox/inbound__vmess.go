@@ -3,7 +3,6 @@ package singbox
 import (
 	"net/netip"
 
-	"github.com/octohelm/x/ptr"
 	"github.com/sagernet/sing-box/option"
 	"github.com/sagernet/sing/common/json/badoption"
 )
@@ -17,7 +16,7 @@ type InboundVMess struct {
 func (d InboundVMess) ApplyTo(o *option.Options) {
 	vmessIn := option.VMessInboundOptions{}
 
-	vmessIn.Listen = ptr.Ptr(badoption.Addr(netip.MustParseAddr("::")))
+	vmessIn.Listen = new(badoption.Addr(netip.MustParseAddr("::")))
 	vmessIn.ListenPort = d.ListenPort
 
 	vmessIn.Users = []option.VMessUser{{
@@ -32,7 +31,7 @@ func (d InboundVMess) ApplyTo(o *option.Options) {
 	})
 
 	vmessInBackup := option.VMessInboundOptions{}
-	vmessInBackup.Listen = ptr.Ptr(badoption.Addr(netip.MustParseAddr("::")))
+	vmessInBackup.Listen = new(badoption.Addr(netip.MustParseAddr("::")))
 	vmessInBackup.ListenPort = d.ListenBackupPort
 	vmessInBackup.Users = []option.VMessUser{{
 		UUID: d.Secret,

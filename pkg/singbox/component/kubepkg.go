@@ -4,8 +4,6 @@ import (
 	"path/filepath"
 
 	kubepkgv1alpha1 "github.com/octohelm/kubepkgspec/pkg/apis/kubepkg/v1alpha1"
-	"github.com/octohelm/x/ptr"
-
 	"github.com/v42one/airport/pkg/runtime"
 	"github.com/v42one/airport/pkg/singbox"
 )
@@ -28,16 +26,16 @@ func (s SingBox) ApplyTo(k *kubepkgv1alpha1.KubePkg) {
 
 		spec.Deploy.SetUnderlying(runtime.Build(func(deploy *kubepkgv1alpha1.DeployDeployment) {
 			deploy.Kind = deploy.GetKind()
-			deploy.Spec.Replicas = ptr.Ptr(int32(1))
+			deploy.Spec.Replicas = new(int32(1))
 		}))
 
 		spec.Services = map[string]kubepkgv1alpha1.Service{
 			"#": *runtime.Build(func(svc *kubepkgv1alpha1.Service) {
-				svc.Expose = &kubepkgv1alpha1.Expose{
-					Underlying: runtime.Build(func(e *kubepkgv1alpha1.ExposeNodePort) {
-						e.Type = e.GetType()
-					}),
-				}
+				svc.Expose = runtime.Build(func(e *kubepkgv1alpha1.Expose) {
+					e.SetUnderlying(runtime.Build(func(x *kubepkgv1alpha1.ExposeNodePort) {
+						x.Type = x.GetKind()
+					}))
+				})
 
 				svc.Ports = map[string]int32{
 					"http":       30100,
@@ -73,7 +71,7 @@ func (s SingBox) ApplyTo(k *kubepkgv1alpha1.KubePkg) {
 
 		spec.Volumes = map[string]kubepkgv1alpha1.Volume{
 			"provider": {
-				Underlying: runtime.Build(func(v *kubepkgv1alpha1.VolumeConfigMap) {
+				ConfigMap: runtime.Build(func(v *kubepkgv1alpha1.VolumeConfigMap) {
 					v.Type = "ConfigMap"
 					v.MountPath = clientConfigMountPath
 					v.SubPath = filepath.Base(clientConfigMountPath)
@@ -91,7 +89,7 @@ func (s SingBox) ApplyTo(k *kubepkgv1alpha1.KubePkg) {
 				}),
 			},
 			"config": {
-				Underlying: runtime.Build(func(v *kubepkgv1alpha1.VolumeConfigMap) {
+				ConfigMap: runtime.Build(func(v *kubepkgv1alpha1.VolumeConfigMap) {
 					v.Type = "ConfigMap"
 					v.MountPath = serverConfigMountPath
 					v.SubPath = filepath.Base(serverConfigMountPath)

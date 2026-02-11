@@ -35,6 +35,15 @@ func (k *SingBox) ClientConfig() *option.Options {
 			Name: "geoip-cn",
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
+			Name: "geosite-google",
+		}),
+		runtime.With(&singbox.DNSRule{
+			Server: "dns-proxy",
+			RuleSets: []singbox.RuleSet{
+				"geosite-google",
+			},
+		}),
+		runtime.With(&singbox.RemoteRuleSet{
 			Name: "geosite-tiktok",
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
@@ -93,6 +102,12 @@ func (k *SingBox) ClientConfig() *option.Options {
 			Outbound: "proxy",
 			RuleSets: []singbox.RuleSet{
 				"geosite-tiktok",
+			},
+		}),
+		runtime.With(&singbox.RouteRule{
+			Outbound: "proxy",
+			RuleSets: []singbox.RuleSet{
+				"geosite-google",
 			},
 		}),
 		runtime.With(&singbox.RouteRule{
