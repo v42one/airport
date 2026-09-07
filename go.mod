@@ -1,27 +1,18 @@
 module github.com/v42one/airport
 
-go 1.26.5
+go 1.27.1
 
-tool (
-	github.com/k0sproject/k0sctl
-	github.com/v42one/airport/internal/cmd/fmt
-)
+tool github.com/k0sproject/k0sctl
 
 require (
-	github.com/octohelm/exp v0.0.0-20260729025016-720bbed53250
-	github.com/octohelm/gengo v0.0.0-20260730025754-c2d1e5db8dc2
-	github.com/octohelm/kubepkgspec v0.0.0-20260731024051-12e573f5e952
-	github.com/octohelm/unifs v0.0.0-20260620094735-3fb03a1ed7a2
-	github.com/octohelm/x v0.0.0-20260508104609-6b72a870e0d2 // indirect
-)
-
-require (
-	github.com/k0sproject/k0sctl v0.32.2
+	github.com/k0sproject/k0sctl v0.32.1
 	github.com/k0sproject/rig/v2 v2.1.1
 	github.com/k0sproject/version v0.8.0
-	github.com/sagernet/sing v0.8.13
-	github.com/sagernet/sing-box v1.13.18
-	github.com/sagernet/sing-dns v0.4.6
+	github.com/octohelm/exp v0.0.0-20260729025016-720bbed53250
+	github.com/octohelm/kubepkgspec v0.0.0-20260731024051-12e573f5e952
+	github.com/octohelm/unifs v0.0.0-20260620094735-3fb03a1ed7a2
+	github.com/sagernet/sing v0.9.2
+	github.com/sagernet/sing-box v1.14.0
 	go.yaml.in/yaml/v3 v3.0.5
 	sigs.k8s.io/yaml v1.6.0
 )
@@ -49,21 +40,21 @@ require (
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/go-json-experiment/json v0.0.0-20260623181947-01eb4420fa68 // indirect
-	github.com/go-logr/logr v1.4.4 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-openapi/jsonreference v1.0.0 // indirect
-	github.com/go-openapi/swag v0.28.0 // indirect
-	github.com/go-openapi/swag/cmdutils v0.28.0 // indirect
-	github.com/go-openapi/swag/conv v0.28.0 // indirect
-	github.com/go-openapi/swag/fileutils v0.28.0 // indirect
-	github.com/go-openapi/swag/jsonutils v0.28.0 // indirect
-	github.com/go-openapi/swag/loading v0.28.0 // indirect
-	github.com/go-openapi/swag/mangling v0.28.0 // indirect
-	github.com/go-openapi/swag/netutils v0.28.0 // indirect
-	github.com/go-openapi/swag/pools v0.28.0 // indirect
-	github.com/go-openapi/swag/stringutils v0.28.0 // indirect
-	github.com/go-openapi/swag/typeutils v0.28.0 // indirect
-	github.com/go-openapi/swag/yamlutils v0.28.0 // indirect
+	github.com/go-openapi/swag v0.27.1 // indirect
+	github.com/go-openapi/swag/cmdutils v0.27.1 // indirect
+	github.com/go-openapi/swag/conv v0.27.1 // indirect
+	github.com/go-openapi/swag/fileutils v0.27.1 // indirect
+	github.com/go-openapi/swag/jsonutils v0.27.1 // indirect
+	github.com/go-openapi/swag/loading v0.27.1 // indirect
+	github.com/go-openapi/swag/mangling v0.27.1 // indirect
+	github.com/go-openapi/swag/netutils v0.27.1 // indirect
+	github.com/go-openapi/swag/pools v0.27.1 // indirect
+	github.com/go-openapi/swag/stringutils v0.27.1 // indirect
+	github.com/go-openapi/swag/typeutils v0.27.1 // indirect
+	github.com/go-openapi/swag/yamlutils v0.27.1 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -90,7 +81,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/octohelm/courier v0.0.0-20260709015711-0580ba3784c9 // indirect
-	github.com/octohelm/kubekit v0.0.0-20260730094523-e605a5eb1620 // indirect
+	github.com/octohelm/kubekit v0.0.0-20260715105218-fbc7eca161e0 // indirect
+	github.com/octohelm/x v0.0.0-20260508104609-6b72a870e0d2 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect
@@ -109,7 +101,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba // indirect
 	golang.org/x/crypto v0.54.0 // indirect
-	golang.org/x/mod v0.39.0 // indirect
+	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
@@ -118,16 +110,15 @@ require (
 	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/tools v0.48.0 // indirect
-	google.golang.org/protobuf v1.36.12 // indirect
+	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/api v0.36.3 // indirect
 	k8s.io/apimachinery v0.36.3 // indirect
 	k8s.io/client-go v0.36.3 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
-	k8s.io/kube-openapi v0.0.0-20260721132016-d427ff9ee9ad // indirect
+	k8s.io/kube-openapi v0.0.0-20260718133925-74c0ba7c0470 // indirect
 	k8s.io/utils v0.0.0-20260707023825-cf1189d6abe3 // indirect
-	mvdan.cc/gofumpt v0.11.0 // indirect
 	sigs.k8s.io/controller-runtime v0.24.1 // indirect
 	sigs.k8s.io/gateway-api v1.6.1 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect

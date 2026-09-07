@@ -62,9 +62,11 @@ func (x OutboundVmess) ApplyTo(opt *option.Options) {
 
 	opt.Outbounds = append(opt.Outbounds,
 		option.Outbound{
-			Tag:     "direct",
-			Type:    "direct",
-			Options: &option.DirectOutboundOptions{},
+			Tag:  "direct",
+			Type: "direct",
+			Options: runtime.Build(func(o *option.DirectOutboundOptions) {
+				o.ConnectTimeout = badoption.Duration(5 * time.Second)
+			}),
 		},
 		proxy,
 		auto,

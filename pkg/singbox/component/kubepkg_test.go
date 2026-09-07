@@ -12,7 +12,7 @@ import (
 
 func TestSingBox(t *testing.T) {
 	s := &SingBox{
-		Version:    "1.12.12",
+		Version:    "1.14.0",
 		ServerName: "sg",
 		ServerIP:   cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 		VMess: &singbox.InboundVMess{

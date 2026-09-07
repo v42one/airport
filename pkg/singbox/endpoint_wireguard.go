@@ -2,8 +2,10 @@ package singbox
 
 import (
 	"net/netip"
+	"time"
 
 	"github.com/sagernet/sing-box/option"
+	"github.com/sagernet/sing/common/json/badoption"
 
 	"github.com/v42one/airport/pkg/runtime"
 )
@@ -46,6 +48,7 @@ func (e WireguardEndpoint) ApplyTo(o *option.Options) {
 		Type: "direct",
 		Tag:  "direct",
 		Options: runtime.Build(func(o *option.DirectOutboundOptions) {
+			o.ConnectTimeout = badoption.Duration(5 * time.Second)
 		}),
 	})
 }

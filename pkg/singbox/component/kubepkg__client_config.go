@@ -29,13 +29,16 @@ func (k *SingBox) ClientConfig() *option.Options {
 			},
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geosite-cn",
+			Name:   "geosite-cn",
+			Detour: "direct",
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geoip-cn",
+			Name:   "geoip-cn",
+			Detour: "direct",
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geosite-google",
+			Name:   "geosite-google",
+			Detour: "direct",
 		}),
 		runtime.With(&singbox.DNSRule{
 			Server: "dns-proxy",
@@ -44,10 +47,12 @@ func (k *SingBox) ClientConfig() *option.Options {
 			},
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geosite-tiktok",
+			Name:   "geosite-tiktok",
+			Detour: "direct",
 		}),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geosite-feishu",
+			Name:   "geosite-feishu",
+			Detour: "direct",
 		}),
 		runtime.With(&singbox.DNSRule{
 			Server: "dns-proxy",

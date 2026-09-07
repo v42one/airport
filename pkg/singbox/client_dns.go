@@ -3,8 +3,8 @@ package singbox
 import (
 	"cmp"
 
+	"github.com/sagernet/sing-box/constant"
 	"github.com/sagernet/sing-box/option"
-	dns "github.com/sagernet/sing-dns"
 
 	"github.com/v42one/airport/pkg/runtime"
 )
@@ -22,7 +22,7 @@ func (d *ClientDNS) ApplyTo(o *option.Options) {
 			local := option.DNSServerOptions{}
 			local.Tag = "local"
 			local.Type = "local"
-			local.Options = make(map[string]interface{})
+			local.Options = make(map[string]any)
 
 			resolver := option.DNSServerOptions{}
 			resolver.Tag = "dns-resolver"
@@ -61,7 +61,7 @@ func (d *ClientDNS) ApplyTo(o *option.Options) {
 				local,
 			)
 
-			dnsOptions.Strategy = option.DomainStrategy(dns.DomainStrategyUseIPv4)
+			dnsOptions.Strategy = option.DomainStrategy(constant.DomainStrategyPreferIPv4)
 		}),
 		WithRouteOptions(func(r *option.RouteOptions) {
 			r.DefaultDomainResolver = runtime.Build(func(dr *option.DomainResolveOptions) {

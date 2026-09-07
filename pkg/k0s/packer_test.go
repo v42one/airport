@@ -25,7 +25,7 @@ var getSingBoxVersion = sync.OnceValue(func() string {
 		}
 	}
 
-	return "v1.13.18"
+	return "v1.14.0"
 })
 
 func TestPacker(t *testing.T) {
@@ -33,7 +33,7 @@ func TestPacker(t *testing.T) {
 
 	p := &Cluster{
 		Name:         "proxy-sg",
-		K0sVersion:   "1.36.3+k0s.1",
+		K0sVersion:   "1.36.4+k0s.0",
 		RemoteServer: cmp.Or(os.Getenv("VMESS_REMOTE_SERVER"), "127.0.0.1"),
 
 		Components: []*kubepkgv1alpha1.KubePkg{

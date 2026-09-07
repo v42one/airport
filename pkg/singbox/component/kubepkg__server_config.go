@@ -23,7 +23,8 @@ func (k *SingBox) ServerConfig() *option.Options {
 		runtime.With(k.Wireguard),
 		runtime.With(k.VMess),
 		runtime.With(&singbox.RemoteRuleSet{
-			Name: "geosite-openai",
+			Name:   "geosite-openai",
+			Detour: "direct",
 		}),
 		singbox.WithLogOptions(func(l *option.LogOptions) {
 			l.Level = "info"

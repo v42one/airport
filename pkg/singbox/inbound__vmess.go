@@ -14,28 +14,25 @@ type InboundVMess struct {
 }
 
 func (d InboundVMess) ApplyTo(o *option.Options) {
-	vmessIn := option.VMessInboundOptions{}
-
-	vmessIn.Listen = new(badoption.Addr(netip.MustParseAddr("::")))
-	vmessIn.ListenPort = d.ListenPort
-
-	vmessIn.Users = []option.VMessUser{{
-		UUID: d.Secret,
-	}}
+	vmessIn := option.VMessInboundOptions{
+		Listen:     new(badoption.Addr(netip.MustParseAddr("::"))),
+		ListenPort: d.ListenPort,
+		Users: []option.VMessUser{{
+			UUID: d.Secret,
+		}}}
 
 	o.Inbounds = append(o.Inbounds, option.Inbound{
-		Tag: "vmess-in",
-
+		Tag:     "vmess-in",
 		Type:    "vmess",
 		Options: vmessIn,
 	})
 
-	vmessInBackup := option.VMessInboundOptions{}
-	vmessInBackup.Listen = new(badoption.Addr(netip.MustParseAddr("::")))
-	vmessInBackup.ListenPort = d.ListenBackupPort
-	vmessInBackup.Users = []option.VMessUser{{
-		UUID: d.Secret,
-	}}
+	vmessInBackup := option.VMessInboundOptions{
+		Listen:     new(badoption.Addr(netip.MustParseAddr("::"))),
+		ListenPort: d.ListenBackupPort,
+		Users: []option.VMessUser{{
+			UUID: d.Secret,
+		}}}
 
 	o.Inbounds = append(o.Inbounds, option.Inbound{
 		Tag: "vmess-in-backup",
